@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css">
+    <title>Quotes Website</title>
+</head>
+
+<body>
+    <div class="quote-wrapper">
+        <div class="quote-body">
+            <div class="icon-quote">
+                <span class="icon">
+                    <i class="fas fa-quote-left"></i>
+                </span>
+                <div id="quotes"></div>
+            </div>
+            <div id="author"></div>
+            <div class="quote-buttons">
+                <div class="social">
+                    <a id="instaMe" href="https://www.instagram.com/itisbhawna/" target="_blank">
+                        <i class="fab fa-twitter-square"></i>
+                    </a>
+                </div>
+                <div class="btn">
+                    <button id="newQuotes"> New Quotes </button>
+                </div>
+            </div>
+        </div>
+        <div class="footer">
+            <p>Powered by <a href="" target="_blank">Bhawna</a></p>
+        </div>
+    </div>
+    <script>
+        const quotes = document.getElementById('quotes')
+        const author = document.getElementById('author')
+        const newQuotes = document.getElementById('newQuotes')
+        const instaMe = document.getElementById('instaMe')
+
+        let realData = ""
+        let quotesData = ""
+        const tweetNow = () => {
+            let instaPost = `https://instagram.com/intent/tweet?text=${quotesData.text} By ${quotesData.author}`
+            window.open(instaPost)
+        }
+        const getRandomQuotes = () => {
+            let randomNum = Math.floor(Math.random() * 40);
+            //console.log(realData[randomNum].author)
+            quotesData = realData[randomNum]
+            quotes.innerText = `${quotesData.text}`
+            quotesData.author == null ? (author.innerText = "unKnown") : (author.innerText = `By ${quotesData.author}`)
+        }
+
+        const getQuotes = async () => {
+            const api = "https://type.fit/api/quotes";
+            try {
+                let data = await fetch(api);
+                realData = await data.json();
+                getRandomQuotes();
+                //console.log(realData.length)
+                //console.log(realData[20].text)
+                //console.log(realData[20].author)
+            } catch (error) { }
+        }
+        instaMe.addEventListener('click', tweetNow)
+        newQuotes.addEventListener('click', getRandomQuotes)
+        getQuotes();
+    </script>
+</body>
+
+</html>
